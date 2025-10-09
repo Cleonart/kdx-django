@@ -9,14 +9,14 @@ class Order(models.Model):
     class Meta:
         db_table = 'order'
 
-    company = models.ForeignKey(
+    company_id = models.ForeignKey(
         Company,
         on_delete=models.RESTRICT,
         related_name='company_order_ids')
-    partner = models.ForeignKey(
+    customer_id = models.ForeignKey(
         Partner,
         on_delete=models.RESTRICT,
-        related_name='partner_order_ids')
+        related_name='customer_order_ids')
     order_date = models.DateField()
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
