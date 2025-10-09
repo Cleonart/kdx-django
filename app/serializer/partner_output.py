@@ -2,7 +2,7 @@ from rest_framework import serializers
 from app.models import Partner
 
 
-class PartnerSerializer(serializers.ModelSerializer):
+class PartnerOutputSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Partner

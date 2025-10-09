@@ -9,11 +9,11 @@ class Order(models.Model):
     class Meta:
         db_table = 'order'
 
-    company_id = models.ForeignKey(
+    company = models.ForeignKey(
         Company,
         on_delete=models.RESTRICT,
         related_name='company_order_ids')
-    customer_id = models.ForeignKey(
+    customer = models.ForeignKey(
         Partner,
         on_delete=models.RESTRICT,
         related_name='customer_order_ids')

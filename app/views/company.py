@@ -9,11 +9,9 @@ from rest_framework.pagination import PageNumberPagination
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from app.serializer import CompanyListSerializer
+from app.serializer import CompanyListSerializer, PartnerOutputSerializer
 from app.models import Company
 from common.openAPI import openAPIParamsInQueryAsStr, openAPIParamsInQueryAsInt
-
-# --- For nice paginated schema in Swagger ---
 
 
 class PaginatedCompanyListSerializer(serializers.Serializer):

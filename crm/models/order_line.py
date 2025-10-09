@@ -9,7 +9,7 @@ class OrderLine(models.Model):
     class Meta:
         db_table = 'crm_order_line'
 
-    order_id = models.ForeignKey(
+    order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
         related_name='lines')

@@ -9,14 +9,14 @@ class OrderService:
     @transaction.atomic
     def create_one(
             company_id: int,
-            customer_name: str,
+            customer_id: int,
             order_date,
             notes: str,
             lines: list) -> Order:
 
         order: Order = Order.objects.create(
             company_id=company_id,
-            customer_name=customer_name,
+            customer_id=customer_id,
             order_date=order_date,
             notes=notes or "")
 

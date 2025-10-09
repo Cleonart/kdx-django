@@ -1,1 +1,3 @@
 from .company_serializer import CompanyListSerializer
+from .partner_output import PartnerOutputSerializer
+from .customer_create import CustomerCreateSerializer
