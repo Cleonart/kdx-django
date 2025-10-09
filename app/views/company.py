@@ -9,6 +9,7 @@ from drf_yasg import openapi
 
 from app.serializer import CompanyListSerializer
 from app.models import Company
+from common.openAPI import openAPIParamsInQueryAsStr, openAPIParamsInQueryAsInt
 
 # --- For nice paginated schema in Swagger ---
 
@@ -20,37 +21,15 @@ class PaginatedCompanyListSerializer(serializers.Serializer):
     results = CompanyListSerializer(many=True)
 
 
-# --- Reusable query parameters for this endpoint ---
-param_page = openapi.Parameter(
-    'page',
-    openapi.IN_QUERY,
-    default=1,
-    description='Current page',
-    type=openapi.TYPE_INTEGER)
-param_page_size = openapi.Parameter(
-    'page_size',
-    openapi.IN_QUERY,
-    default=10,
-    description='Page Size',
-    type=openapi.TYPE_INTEGER)
-param_name = openapi.Parameter(
-    'name',
-    openapi.IN_QUERY,
-    description='Filter by company name',
-    type=openapi.TYPE_STRING)
-param_code = openapi.Parameter(
-    'code',
-    openapi.IN_QUERY,
-    description='Filter by company code',
-    type=openapi.TYPE_STRING)
-
-
 class APICompanies(APIView):
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
-        manual_parameters=[param_code, param_name,
-                           param_page, param_page_size],
+        manual_parameters=[
+            openAPIParamsInQueryAsStr('code', 'Filter by company code'),
+            openAPIParamsInQueryAsStr('name', 'Filter by company name'),
+            openAPIParamsInQueryAsInt('page', 'Current Page'),
+            openAPIParamsInQueryAsInt('page_size', 'Page Size')],
         operation_summary='List companies',
         operation_description='Returns a paginated list of companies filtered by optional `name` and `code`.',
         responses={
