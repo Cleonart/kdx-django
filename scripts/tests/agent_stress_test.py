@@ -1,17 +1,8 @@
 # locustfile.py
 from locust import HttpUser, task, between, constant
 import random
-import string
 from datetime import datetime, timezone
 
-def rand_product_name(length=10):
-    # random letters+digits, e.g., "x3bT9pQa2L"
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
-
-def rand_price_str(min_cents=100, max_cents=500_000):
-    # from $1.00 to $5000.00 (adjust as needed), returned as a STRING with 2 decimals
-    cents = random.randint(min_cents, max_cents)
-    return f"{cents / 100:.2f}"
 
 class CompanyAPIUser(HttpUser):
     # Wait time between requests (simulates user think time)
@@ -62,20 +53,20 @@ class OrderCreationUser(HttpUser):
         headers: dict = {
             'accept': 'application/json',
             'Content-Type': 'application/json',
+            'X-CSRFTOKEN': 'WXjg2q716Qm9WydRHkbKrnTmeLGBDldERdSLkdVcsgHHZloPPDg1Njm9phYY7icH'
         }
 
         # Generate order data
         order_data = {
-            'company_id': None,
+            'company_id': 0,
             'company_code': random.choice(self.company_codes),
-            'customer_id': None,
+            'customer_id': 0,
             'customer_code': 'TEST12345',
             'order_date': datetime.now(timezone.utc).isoformat(),
             'notes': 'Sample order from load test',
-            "lines": [
-                {"product_name": f"test-{i:03d}",
-                "quantity": (i % 5) + 1,
-                "unit_price": "525.20"}
+            'lines': [
+                {'product_name': f'test-{i:03d}',
+                    'quantity': (i % 5) + 1, 'unit_price': '525.20'}
                 for i in range(1, 101)  # Creates 100 line items
             ]
         }
