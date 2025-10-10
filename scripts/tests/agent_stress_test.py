@@ -53,7 +53,6 @@ class OrderCreationUser(HttpUser):
         headers: dict = {
             'accept': 'application/json',
             'Content-Type': 'application/json',
-            'X-CSRFTOKEN': 'WXjg2q716Qm9WydRHkbKrnTmeLGBDldERdSLkdVcsgHHZloPPDg1Njm9phYY7icH'
         }
 
         # Generate order data
