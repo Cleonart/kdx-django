@@ -68,14 +68,16 @@ class OrderCreationUser(HttpUser):
 
         # Generate order data
         order_data = {
+            'company_id': None,
             'company_code': random.choice(self.company_codes),
+            'customer_id': None,
             'customer_code': 'TEST12345',
             'order_date': datetime.now(timezone.utc).isoformat(),
             'notes': 'Sample order from load test',
             'lines': [{
                 "product_name": rand_product_name(),
                 "quantity": (i % 5) + 1,
-                "unit_price": rand_price_str()
+                "unit_price": "510.50"
             } for i in range(1, 101)]
         }
 
