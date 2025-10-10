@@ -1,10 +1,8 @@
 # locustfile.py
 from locust import HttpUser, task, between, constant
 import random
-from datetime import datetime, timezone
-
-import random
 import string
+from datetime import datetime, timezone
 
 def rand_product_name(length=10):
     # random letters+digits, e.g., "x3bT9pQa2L"
@@ -74,11 +72,12 @@ class OrderCreationUser(HttpUser):
             'customer_code': 'TEST12345',
             'order_date': datetime.now(timezone.utc).isoformat(),
             'notes': 'Sample order from load test',
-            'lines': [{
-                "product_name": rand_product_name(),
+            "lines": [
+                {"product_name": f"test-{i:03d}",
                 "quantity": (i % 5) + 1,
-                "unit_price": "510.50"
-            } for i in range(1, 101)]
+                "unit_price": "525.20"}
+                for i in range(1, 101)  # Creates 100 line items
+            ]
         }
 
         with self.client.post(
