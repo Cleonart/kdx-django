@@ -17,7 +17,7 @@ class Order(models.Model):
         Partner,
         on_delete=models.RESTRICT,
         related_name='customer_order_ids')
-    order_date = models.DateField()
+    order_date = models.DateTimeField()
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
