@@ -20,6 +20,7 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework import permissions
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -28,15 +29,15 @@ schema_view = get_schema_view(
         description="Test description",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="contact@snippets.local"),
-        license=openapi.License(name="BSD License"),
-    ),
+        license=openapi.License(name="BSD License")),
     public=True,
-)
+    permission_classes=[permissions.AllowAny],)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('app.urls')),
     path('api/', include('crm.urls')),
+    path('api/', include('authentication.urls')),
 
     path('swagger.<format>/',
          schema_view.without_ui(cache_timeout=0), name='schema-json'),
