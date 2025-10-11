@@ -48,10 +48,10 @@ INSTALLED_APPS = [
 
     # third-party
     'rest_framework',
+    'rest_framework_simplejwt',
     'drf_yasg',
 
     # modules
-    'common',
     'app',
     'crm'
 ]
@@ -133,6 +133,9 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 100,
     'PAGE_SIZE_QUERY_PARAM': 'page_size',
     'MAX_PAGE_SIZE': 200,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
 
 

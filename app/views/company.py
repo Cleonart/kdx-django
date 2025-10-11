@@ -11,7 +11,7 @@ from drf_yasg import openapi
 
 from app.serializer import CompanyListSerializer, PartnerOutputSerializer
 from app.models import Company
-from common.openAPI import openAPIParamsInQueryAsStr, openAPIParamsInQueryAsInt
+from app.utils.openAPI import openAPIParamsInQueryAsStr, openAPIParamsInQueryAsInt
 
 
 class PaginatedCompanyListSerializer(serializers.Serializer):
