@@ -15,4 +15,3 @@ class UserSerializer(serializers.ModelSerializer):
             'last_name',
             'date_joined']
         read_only_fields = ['id', 'date_joined']
-
