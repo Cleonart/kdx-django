@@ -28,7 +28,9 @@ load_dotenv(BASE_DIR / ".env")
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_w5f99enh75f@f=ue%zw8ng+8*!gam5k2xoofi5n@90)!*5of8'
+SECRET_KEY = os.getenv(
+    'JWT_SECRET',
+    'django-insecure-_w5f99enh75f@f=ue%zw8ng+8*!gam5k2xoofi5n@90)!*5of8')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -65,6 +67,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # app middleware
+    'app.middleware.CompanyMiddleware',
 ]
 
 ROOT_URLCONF = 'kdx.urls'
@@ -176,7 +181,8 @@ SIMPLE_JWT: dict = {
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_OBTAIN_SERIALIZER': 'authentication.serializers.JWTTokenSerializer',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken'),
     'TOKEN_TYPE_CLAIM': 'token_type',
     'JTI_CLAIM': 'jti',
 }
