@@ -19,6 +19,7 @@ class AuthUserCompany(models.Model):
         on_delete=models.RESTRICT,
         related_name='auth_user_company_ids')
     company_code = models.CharField(max_length=64)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username}'s profile"
