@@ -1,9 +1,7 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
-from .models import Company
+from app.models import Company
 from authentication.models import AuthUserCompany
 
-# 👇 override sidebar label only for this model
 Company._meta.verbose_name_plural = 'Companies / Tenants'
 AuthUserCompany._meta.verbose_name_plural = 'User Organization Member'
 
@@ -33,7 +31,3 @@ class AuthUserCompanyAdmin(admin.ModelAdmin):
         extra_context = extra_context or {}
         extra_context['title'] = 'User Organization Member'
         return super().changelist_view(request, extra_context=extra_context)
-
-
-# Enable autocomplete for User
-admin.site.unregister(User)

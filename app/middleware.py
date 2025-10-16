@@ -18,18 +18,12 @@ class CompanyMiddleware:
         elif 'X-Company-Code' in request.headers:
             company_code = request.headers['X-Company-Code']
             cache_key: str = f'company_code_{company_code}'
-
-            # Try to get from cache first
             company = cache.get(cache_key)
 
             # if not in cache, fetch from DB and set cache
             if company is None:
-                try:
-                    company = Company.objects.get(code=company_code)
-                    # Cache for 1 hour (3600 seconds)
-                    cache.set(cache_key, company, 3600)
-                except Company.DoesNotExist:
-                    company = None
+                company = Company.objects.get(code=company_code)
+                cache.set(cache_key, company, 3600)
         else:
             company = None
 

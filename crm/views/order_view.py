@@ -2,6 +2,7 @@
 
 from drf_yasg.utils import swagger_auto_schema
 from django.shortcuts import get_object_or_404
+from app.utils.openAPI import openAPIHeadersCompanyCode
 from rest_framework.decorators import api_view, permission_classes, APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -17,6 +18,7 @@ class APIOrders(APIView):
 
     @swagger_auto_schema(
         request_body=OrderCreateSerializer,
+        manual_parameters=[openAPIHeadersCompanyCode()],
         responses={201: OrderOutputSerializer},
         operation_summary="Create order",
         operation_description="Create new order")
