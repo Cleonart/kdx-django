@@ -410,6 +410,62 @@
           width: 100%;
         }
       }
+
+      /* Make each operation body a 2-column grid */
+      .swagger-ui .opblock-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;           /* left/right */
+        grid-template-areas:
+          "desc desc"                             /* description full width */
+          "params responses"                      /* split */
+          "exec responses";                       /* keep responses visible while executing */
+        gap: 16px;
+        align-items: start;
+      }
+
+      /* Description stays full width on top */
+      .swagger-ui .opblock-body > .opblock-description-wrapper {
+        grid-area: desc;
+      }
+
+      /* Parameters (table) → left column */
+      .swagger-ui .opblock-body > .opblock-section:has(.parameters-container),
+      .swagger-ui .opblock-body > .opblock-section:has(table.parameters),
+      .swagger-ui .opblock-body > .opblock-section.request-body {
+        grid-area: params;
+      }
+
+      /* Execute button wrapper under parameters (left) */
+      .swagger-ui .opblock-body > .execute-wrapper {
+        grid-area: exec;
+        padding: 8px 30px;
+      }
+
+      .swagger-ui .opblock-body > .btn-group {
+        grid-area: exec;
+        padding: 8px 30px;
+      }
+
+      /* Responses → right column */
+      .swagger-ui .opblock-body > .responses-wrapper,
+      .swagger-ui .opblock-body > .opblock-section.responses-wrapper {
+        grid-area: responses;
+        max-height: 85vh !important;
+        overflow: auto;
+        position: sticky; top: 0;                 /* optional: keep visible while scrolling left */
+      }
+
+      /* Optional: tidy visuals */
+      .swagger-ui .opblock-section,
+      .swagger-ui .responses-wrapper {
+        background: #fff;
+        border-radius: 6px;
+        box-sizing: border-box;
+      }
+      
+      .swagger-ui .parameters-col_description{
+        font-size: 14px;
+      }
     </style>
   </head>
   <body>
@@ -477,36 +533,6 @@
           </div>
           <div id="swagger-ui"></div>
         </div>
-
-        <!-- Try It Out Panel -->
-        <div class="content-tryout" id="tryout-panel">
-          <div v-if="!selectedEndpoint" class="tryout-container">
-            <div class="empty-state">
-              <h3>Select an endpoint</h3>
-              <p v-if="activeCategory">
-                Click on an endpoint from the
-                <strong style="color: #ff6b35">{% verbatim %}{{ activeCategory }}{% endverbatim %}</strong>
-                category to view details.
-              </p>
-              <p v-else>Select a category to get started.</p>
-            </div>
-          </div>
-
-          <div v-else class="tryout-container" id="right-panel-content">
-            <div class="tryout-header">
-              <h3>Try it out</h3>
-              <div class="endpoint-display">
-                <span
-                  class="endpoint-method"
-                  :class="'method-' + selectedEndpoint.method.toLowerCase()"
-                >
-                  {% verbatim %}{{ selectedEndpoint.method }}{% endverbatim %}
-                </span>
-                <span class="endpoint-path">{% verbatim %}{{ selectedEndpoint.path }}{% endverbatim %}</span>
-              </div>
-            </div>
-            <!-- Content will be populated by JavaScript -->
-          </div>
         </div>
       </main>
     </div>
@@ -746,6 +772,15 @@
               if (summary) summary.click();
             }
 
+            let operationId = 'operations-' + endpoint.tag + '-' + endpoint.operationId;
+            const op = document.getElementById(operationId);
+            if (op) {
+              const btn = op.querySelector('.opblock-summary-control');
+              if (btn && btn.ariaExpanded === 'false') {
+                btn.click();
+              }
+            }
+
             // Scroll to operation with offset for sticky header
             setTimeout(() => {
               const categoryBanner = document.querySelector('.category-header-banner');
@@ -754,26 +789,12 @@
               const operationTop = operation.getBoundingClientRect().top;
               const scrollContainer = document.querySelector('.content-documentation');
               const currentScroll = scrollContainer.scrollTop;
-              
+
               // Scroll with offset for banner
               scrollContainer.scrollTo({
                 top: currentScroll + operationTop - bannerHeight - 20,
                 behavior: 'smooth'
               });
-
-              // Enable "Try it out"
-              setTimeout(() => {
-                const tryOutBtn = operation.querySelector('.try-out__btn');
-                if (tryOutBtn && tryOutBtn.textContent.includes('Try it out')) {
-                  tryOutBtn.click();
-                }
-
-                // Populate right panel
-                setTimeout(() => {
-                  populateRightPanel(operation);
-                  monitorResponses(operation);
-                }, 300);
-              }, 300);
             }, 100);
           };
 
