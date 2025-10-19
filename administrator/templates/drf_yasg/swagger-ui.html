@@ -1,0 +1,922 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }}</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/favicon-32x32.png"
+      sizes="32x32"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          'Helvetica Neue', Arial, sans-serif;
+        overflow: hidden;
+        margin: 0;
+      }
+
+      .swagger-ui .wrapper {
+        padding: 0px 0px;
+      }
+
+      /* Hide default swagger elements */
+      .swagger-ui .topbar,
+      .swagger-ui .information-container,
+      .swagger-ui .scheme-container {
+        display: none !important;
+      }
+
+      /* Main Container */
+      .api-docs-wrapper {
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      /* Sidebar */
+      .api-sidebar {
+        width: 280px;
+        background: #1a1a1a;
+        color: #fff;
+        overflow-y: auto;
+        flex-shrink: 0;
+        z-index: 100;
+      }
+
+      .sidebar-header {
+        padding: 24px 20px;
+        border-bottom: 1px solid #333;
+      }
+
+      .sidebar-header h1 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #fff;
+      }
+
+      .sidebar-header p {
+        font-size: 13px;
+        color: #999;
+      }
+
+      .sidebar-search {
+        padding: 16px 20px;
+        border-bottom: 1px solid #333;
+      }
+
+      .sidebar-search input {
+        width: 100%;
+        padding: 10px 12px;
+        background: #2a2a2a;
+        border: 1px solid #404040;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 14px;
+      }
+
+      .sidebar-search input::placeholder {
+        color: #777;
+      }
+
+      .sidebar-search input:focus {
+        outline: none;
+        border-color: #ff6b35;
+      }
+
+      .sidebar-nav {
+        padding: 12px 0;
+      }
+
+      .nav-category {
+        margin-bottom: 4px;
+      }
+
+      .category-header {
+        padding: 10px 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        font-weight: 600;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.2s;
+      }
+
+      .category-header:hover {
+        color: #fff;
+        background: #2a2a2a;
+      }
+
+      .category-header.active {
+        color: #fff;
+      }
+
+      .category-arrow {
+        transition: transform 0.2s;
+        font-size: 10px;
+      }
+
+      .category-header.active .category-arrow {
+        transform: rotate(90deg);
+      }
+
+      .category-endpoints {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .category-endpoints.show {
+        max-height: 3000px;
+      }
+
+      .endpoint-item {
+        padding: 10px 20px 10px 36px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        transition: all 0.2s;
+        border-left: 3px solid transparent;
+        color: #ccc;
+      }
+
+      .endpoint-item:hover {
+        background: #2a2a2a;
+        color: #fff;
+      }
+
+      .endpoint-item.active {
+        background: #2a2a2a;
+        border-left-color: #ff6b35;
+        color: #fff;
+      }
+
+      .endpoint-method {
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        flex-shrink: 0;
+      }
+
+      .endpoint-method.get {
+        background: #61affe;
+        color: #fff;
+      }
+      .endpoint-method.post {
+        background: #49cc90;
+        color: #fff;
+      }
+      .endpoint-method.put {
+        background: #fca130;
+        color: #fff;
+      }
+      .endpoint-method.patch {
+        background: #50e3c2;
+        color: #fff;
+      }
+      .endpoint-method.delete {
+        background: #f93e3e;
+        color: #fff;
+      }
+      .endpoint-method.head {
+        background: #9012fe;
+        color: #fff;
+      }
+      .endpoint-method.options {
+        background: #0d5aa7;
+        color: #fff;
+      }
+
+      .endpoint-name {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* Main Content Area */
+      .api-content {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+      }
+
+      .content-documentation {
+        flex: 1;
+        background: #fafafa;
+        overflow-y: auto;
+      }
+
+      .content-tryout {
+        width: 45%;
+        background: #252525;
+        overflow-y: auto;
+        border-left: 1px solid #333;
+      }
+
+      /* Swagger UI Customization */
+      #swagger-ui {
+        max-width: none !important;
+      }
+
+      .swagger-ui .opblock-tag-section {
+        border: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .swagger-ui .opblock-tag {
+        display: none !important;
+      }
+
+      .swagger-ui .opblock {
+        border: none;
+        box-shadow: none;
+        margin: 0 0 2px 0;
+        background: transparent;
+      }
+
+      .swagger-ui .opblock .opblock-summary {
+        border: none;
+        padding: 12px 20px;
+        background: #fff;
+        border-bottom: 1px solid #e1e4e8;
+      }
+
+      .swagger-ui .opblock.is-open .opblock-summary {
+        border-bottom: none;
+      }
+
+      .swagger-ui .opblock-body {
+        padding: 0px 20px;
+        background: #fff;
+      }
+
+      .swagger-ui .opblock-section-header {
+        background: #fafafa;
+        padding: 12px 20px;
+        font-weight: 600;
+      }
+
+      .swagger-ui .opblock-description-wrapper {
+        padding: 0px;
+      }
+
+      .swagger-ui .opblock-description-wrapper p {
+        font-size: 15px;
+        line-height: 1.6;
+        color: #666;
+      }
+
+      .swagger-ui .parameter__name {
+        font-weight: 600;
+        color: #ff6b35;
+      }
+
+      .swagger-ui .parameter__type {
+        color: #666;
+        font-size: 13px;
+      }
+
+      .swagger-ui table thead tr th {
+        font-size: 12px;
+        font-weight: 600;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: #f8f9fa;
+      }
+
+      /* Try it out section - move to right panel */
+      .swagger-ui .table-container {
+        padding: 0px;
+      }
+      .swagger-ui .btn {
+        font-weight: 600;
+        border-radius: 6px;
+        padding: 10px 20px;
+      }
+
+      .swagger-ui .btn.execute {
+        background: #ff6b35;
+        border-color: #ff6b35;
+      }
+
+      .swagger-ui .btn.execute:hover {
+        background: #ff5722;
+        border-color: #ff5722;
+      }
+
+      /* Response section styling */
+      .swagger-ui .responses-inner {
+        padding: 20px;
+        background: #1e1e1e;
+        border-radius: 6px;
+      }
+
+      .swagger-ui .response-col_status {
+        font-weight: 600;
+      }
+
+      .swagger-ui .response .response-col_description {
+        color: #ccc;
+      }
+
+      .swagger-ui .highlight-code {
+        background: #2a2a2a;
+      }
+
+      .swagger-ui .microlight {
+        color: #f8f8f2;
+      }
+
+      /* Models section */
+      .swagger-ui .model-box {
+        background: #fafafa;
+        border-radius: 6px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+
+      .swagger-ui .model {
+        font-size: 13px;
+      }
+
+      .swagger-ui .model-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+      }
+
+      /* Scrollbar styling */
+      .api-sidebar::-webkit-scrollbar,
+      .content-documentation::-webkit-scrollbar,
+      .content-tryout::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .api-sidebar::-webkit-scrollbar-track {
+        background: #1a1a1a;
+      }
+
+      .api-sidebar::-webkit-scrollbar-thumb {
+        background: #404040;
+        border-radius: 4px;
+      }
+
+      .content-documentation::-webkit-scrollbar-track {
+        background: #fafafa;
+      }
+
+      .content-documentation::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+      }
+
+      .content-tryout::-webkit-scrollbar-track {
+        background: #252525;
+      }
+
+      .content-tryout::-webkit-scrollbar-thumb {
+        background: #404040;
+        border-radius: 4px;
+      }
+
+      /* Responsive */
+      @media (max-width: 1200px) {
+        .content-tryout {
+          width: 50%;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .api-docs-wrapper {
+          flex-direction: column;
+        }
+
+        .api-sidebar {
+          width: 100%;
+          height: 40vh;
+        }
+
+        .api-content {
+          flex-direction: column;
+          height: 60vh;
+        }
+
+        .content-documentation,
+        .content-tryout {
+          width: 100%;
+          height: 50%;
+        }
+      }
+
+      #tryout-panel .swagger-ui .parameters-container {
+        background: transparent !important;
+      }
+
+      #tryout-panel .swagger-ui table thead tr th {
+        background: #1a1a1a !important;
+        color: #999 !important;
+      }
+
+      #tryout-panel .swagger-ui table tbody tr td {
+        background: transparent !important;
+        color: #ccc !important;
+      }
+
+      #tryout-panel .swagger-ui input,
+      #tryout-panel .swagger-ui textarea,
+      #tryout-panel .swagger-ui select {
+        background: #1a1a1a !important;
+        color: #fff !important;
+        border: 1px solid #404040 !important;
+      }
+
+      #tryout-panel .swagger-ui .body-param__text {
+        background: #1a1a1a !important;
+        color: #fff !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="api-docs-wrapper">
+      <!-- Sidebar Navigation -->
+      <aside class="api-sidebar">
+        <div class="sidebar-header">
+          <h1>{{ title }}</h1>
+          <p>{{ description|truncatewords:10 }}</p>
+        </div>
+
+        <div class="sidebar-search">
+          <input
+            type="text"
+            id="endpoint-search"
+            placeholder="Search endpoints..."
+          />
+        </div>
+
+        <nav class="sidebar-nav" id="sidebar-nav">
+          <!-- Will be populated by JavaScript -->
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="api-content">
+        <div class="content-documentation">
+          <div id="swagger-ui"></div>
+        </div>
+        <div class="content-tryout" id="tryout-panel">
+          <!-- Try it out section will be moved here -->
+        </div>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
+    <script>
+      window.onload = function () {
+        const ui = SwaggerUIBundle({
+          url: "{% url 'schema-json' %}",
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+          plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+          layout: 'BaseLayout',
+          defaultModelsExpandDepth: 1,
+          defaultModelExpandDepth: 1,
+          docExpansion: 'list',
+          filter: false,
+          showExtensions: true,
+          showCommonExtensions: true,
+          onComplete: function () {
+            setTimeout(() => {
+              initializeSidebar();
+              setupSearch();
+              handleEndpointNavigation();
+            }, 1000);
+          },
+        });
+
+        window.ui = ui;
+      };
+
+      function initializeSidebar() {
+        try {
+          const spec = window.ui.specSelectors.spec().toJS();
+          const sidebar = document.getElementById('sidebar-nav');
+          const paths = spec.paths || {};
+
+          const taggedEndpoints = {};
+
+          Object.keys(paths).forEach((path) => {
+            Object.keys(paths[path]).forEach((method) => {
+              if (method === 'parameters') return;
+
+              const operation = paths[path][method];
+              const tag = (operation.tags && operation.tags[0]) || 'default';
+
+              if (!taggedEndpoints[tag]) {
+                taggedEndpoints[tag] = [];
+              }
+
+              taggedEndpoints[tag].push({
+                path: path,
+                method: method.toUpperCase(),
+                summary: operation.summary || operation.operationId || path,
+                operationId: operation.operationId,
+                tag: tag,
+              });
+            });
+          });
+
+          let sidebarHTML = '';
+          Object.keys(taggedEndpoints).forEach((tag, index) => {
+            const isFirst = index === 0;
+            sidebarHTML += `
+                    <div class="nav-category">
+                        <div class="category-header ${
+                          isFirst ? 'active' : ''
+                        }" data-tag="${tag}">
+                            <span>${tag}</span>
+                            <span class="category-arrow">▶</span>
+                        </div>
+                        <div class="category-endpoints ${
+                          isFirst ? 'show' : ''
+                        }">
+                `;
+
+            taggedEndpoints[tag].forEach((endpoint, epIndex) => {
+              const isFirstEndpoint = isFirst && epIndex === 0;
+              sidebarHTML += `
+                        <div class="endpoint-item ${
+                          isFirstEndpoint ? 'active' : ''
+                        }" 
+                             data-path="${endpoint.path}"
+                             data-method="${endpoint.method.toLowerCase()}"
+                             data-tag="${endpoint.tag}"
+                             data-operation-id="${endpoint.operationId || ''}">
+                            <span class="endpoint-method ${endpoint.method.toLowerCase()}">${
+                endpoint.method
+              }</span>
+                            <span class="endpoint-name">${
+                              endpoint.summary
+                            }</span>
+                        </div>
+                    `;
+            });
+
+            sidebarHTML += `</div></div>`;
+          });
+
+          sidebar.innerHTML = sidebarHTML;
+
+          document.querySelectorAll('.category-header').forEach((header) => {
+            header.addEventListener('click', function () {
+              const endpoints = this.nextElementSibling;
+              const isActive = this.classList.contains('active');
+
+              document
+                .querySelectorAll('.category-header')
+                .forEach((h) => h.classList.remove('active'));
+              document
+                .querySelectorAll('.category-endpoints')
+                .forEach((e) => e.classList.remove('show'));
+
+              if (!isActive) {
+                this.classList.add('active');
+                endpoints.classList.add('show');
+              }
+            });
+          });
+        } catch (error) {
+          console.error('Error initializing sidebar:', error);
+        }
+      }
+
+      function handleEndpointNavigation() {
+        document.querySelectorAll('.endpoint-item').forEach((item) => {
+          item.addEventListener('click', function () {
+            const method = this.dataset.method;
+            const path = this.dataset.path;
+            const tag = this.dataset.tag;
+
+            document
+              .querySelectorAll('.endpoint-item')
+              .forEach((i) => i.classList.remove('active'));
+            this.classList.add('active');
+
+            let operation = findOperation(method, path, tag);
+
+            if (operation) {
+              document.querySelectorAll('.opblock').forEach((block) => {
+                if (block !== operation) {
+                  block.classList.remove('is-open');
+                }
+              });
+
+              if (!operation.classList.contains('is-open')) {
+                const summary = operation.querySelector('.opblock-summary');
+                if (summary) {
+                  summary.click();
+                }
+              }
+
+              setTimeout(() => {
+                operation.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start',
+                });
+
+                // Auto-enable "Try it out"
+                setTimeout(() => {
+                  const tryOutBtn = operation.querySelector('.try-out__btn');
+                  if (
+                    tryOutBtn &&
+                    tryOutBtn.textContent.includes('Try it out')
+                  ) {
+                    tryOutBtn.click();
+                  }
+
+                  // Wait for try-it-out to expand, then move to right panel
+                  setTimeout(() => {
+                    populateRightPanel(operation, method, path);
+                    startMonitoringOperation(operation);
+                  }, 300);
+                }, 300);
+              }, 100);
+            }
+          });
+        });
+      }
+
+      function findOperation(method, path, tag) {
+        const allOperations = document.querySelectorAll('.opblock');
+
+        for (let op of allOperations) {
+          const hasMethodClass = op.classList.contains(`opblock-${method}`);
+          if (!hasMethodClass) continue;
+
+          const pathElement = op.querySelector('.opblock-summary-path');
+          if (pathElement) {
+            const opPath = pathElement.textContent.trim();
+            if (
+              opPath === path ||
+              opPath.replace(/\/$/, '') === path.replace(/\/$/, '')
+            ) {
+              return op;
+            }
+          }
+        }
+
+        return null;
+      }
+
+      function populateRightPanel(operation, method, path) {
+        const rightPanel = document.getElementById('tryout-panel');
+        rightPanel.innerHTML = '';
+
+        const container = document.createElement('div');
+        container.style.cssText = 'padding: 20px 15px; color: #fff;';
+        container.id = 'right-panel-content';
+
+        // Header
+        const header = document.createElement('div');
+        header.innerHTML = `
+            <h3 style="font-size: 18px; margin-bottom: 10px; font-weight: 600;">Try it out</h3>
+            <div style="background: #2a2a2a; padding: 7px 6px; border-radius: 6px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+                <span class="endpoint-method ${method}" style="padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">${method.toUpperCase()}</span>
+                <span style="font-family: monospace; color: #fff; font-size: 14px;">${path}</span>
+            </div>
+        `;
+        container.appendChild(header);
+
+        // Parameters section
+        const parametersContainer = operation.querySelector(
+          '.parameters-container',
+        );
+        if (parametersContainer) {
+          const paramsSection = document.createElement('div');
+          paramsSection.style.cssText = 'margin-bottom: 24px;';
+          paramsSection.innerHTML =
+            '<h4 style="font-size: 16px; margin-bottom: 16px; color: #fff; font-weight: 600;">Parameters</h4>';
+
+          const paramsClone = parametersContainer.cloneNode(true);
+          paramsClone.style.cssText = 'background: transparent;';
+
+          // Sync inputs
+          syncElements(parametersContainer, paramsClone);
+
+          paramsSection.appendChild(paramsClone);
+          container.appendChild(paramsSection);
+        }
+
+        // Request body section
+        const requestBody = operation.querySelector('.body-param');
+        if (requestBody) {
+          const bodySection = document.createElement('div');
+          bodySection.style.cssText = 'margin-bottom: 24px;';
+          bodySection.innerHTML =
+            '<h4 style="font-size: 16px; margin-bottom: 16px; color: #fff; font-weight: 600;">Request Body</h4>';
+
+          const bodyClone = requestBody.cloneNode(true);
+          syncElements(requestBody, bodyClone);
+
+          bodySection.appendChild(bodyClone);
+          container.appendChild(bodySection);
+        }
+
+        // Execute button
+        const executeWrapper = operation.querySelector('.execute-wrapper');
+        if (executeWrapper) {
+          const executeClone = executeWrapper.cloneNode(true);
+          const originalBtn = executeWrapper.querySelector('.execute');
+          const clonedBtn = executeClone.querySelector('.execute');
+
+          if (originalBtn && clonedBtn) {
+            clonedBtn.addEventListener('click', () => {
+              originalBtn.click();
+            });
+          }
+
+          container.appendChild(executeClone);
+        }
+
+        rightPanel.appendChild(container);
+      }
+
+      function syncElements(original, clone) {
+        // Sync all input fields
+        const originalInputs = original.querySelectorAll(
+          'input, textarea, select',
+        );
+        const clonedInputs = clone.querySelectorAll('input, textarea, select');
+
+        originalInputs.forEach((originalInput, index) => {
+          const clonedInput = clonedInputs[index];
+          if (!clonedInput) return;
+
+          // Copy current value
+          clonedInput.value = originalInput.value;
+
+          // Sync from clone to original
+          clonedInput.addEventListener('input', () => {
+            originalInput.value = clonedInput.value;
+            originalInput.dispatchEvent(new Event('input', { bubbles: true }));
+            originalInput.dispatchEvent(new Event('change', { bubbles: true }));
+          });
+
+          clonedInput.addEventListener('change', () => {
+            originalInput.value = clonedInput.value;
+            originalInput.dispatchEvent(new Event('input', { bubbles: true }));
+            originalInput.dispatchEvent(new Event('change', { bubbles: true }));
+          });
+
+          // Sync from original to clone
+          originalInput.addEventListener('input', () => {
+            clonedInput.value = originalInput.value;
+          });
+
+          originalInput.addEventListener('change', () => {
+            clonedInput.value = originalInput.value;
+          });
+        });
+
+        // Sync checkboxes
+        const originalCheckboxes = original.querySelectorAll(
+          'input[type="checkbox"]',
+        );
+        const clonedCheckboxes = clone.querySelectorAll(
+          'input[type="checkbox"]',
+        );
+
+        originalCheckboxes.forEach((originalCheckbox, index) => {
+          const clonedCheckbox = clonedCheckboxes[index];
+          if (!clonedCheckbox) return;
+
+          clonedCheckbox.checked = originalCheckbox.checked;
+
+          clonedCheckbox.addEventListener('change', () => {
+            originalCheckbox.checked = clonedCheckbox.checked;
+            originalCheckbox.dispatchEvent(
+              new Event('change', { bubbles: true }),
+            );
+          });
+
+          originalCheckbox.addEventListener('change', () => {
+            clonedCheckbox.checked = originalCheckbox.checked;
+          });
+        });
+      }
+
+      function startMonitoringOperation(operation) {
+        const rightPanel = document.getElementById('right-panel-content');
+        if (!rightPanel) return;
+
+        // Monitor for responses
+        const responsesWrapper = operation.querySelector('.responses-wrapper');
+        if (!responsesWrapper) return;
+
+        const observer = new MutationObserver(() => {
+          const responsesInner =
+            responsesWrapper.querySelector('.responses-inner');
+          if (responsesInner && responsesInner.children.length > 0) {
+            // Remove existing response in right panel
+            const existingResponse =
+              rightPanel.querySelector('.responses-wrapper');
+            if (existingResponse) {
+              existingResponse.remove();
+            }
+
+            // Clone and add new response
+            const responseClone = responsesWrapper.cloneNode(true);
+
+            // Style the response for dark theme
+            const responseSection = document.createElement('div');
+            responseSection.style.cssText = 'margin-top: 24px;';
+            responseSection.innerHTML =
+              '<h4 style="font-size: 16px; margin-bottom: 16px; color: #fff; font-weight: 600;">Response</h4>';
+            responseSection.appendChild(responseClone);
+
+            rightPanel.appendChild(responseSection);
+
+            // Scroll to response
+            setTimeout(() => {
+              responseSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+              });
+            }, 100);
+          }
+        });
+
+        observer.observe(responsesWrapper, {
+          childList: true,
+          subtree: true,
+        });
+      }
+
+      function setupSearch() {
+        const searchInput = document.getElementById('endpoint-search');
+        searchInput.addEventListener('input', function (e) {
+          const searchTerm = e.target.value.toLowerCase();
+          const endpoints = document.querySelectorAll('.endpoint-item');
+
+          endpoints.forEach((endpoint) => {
+            const text = endpoint.textContent.toLowerCase();
+            const category = endpoint.closest('.nav-category');
+
+            if (text.includes(searchTerm)) {
+              endpoint.style.display = 'flex';
+              category.style.display = 'block';
+
+              if (searchTerm) {
+                const categoryHeader =
+                  category.querySelector('.category-header');
+                const categoryEndpoints = category.querySelector(
+                  '.category-endpoints',
+                );
+                categoryHeader.classList.add('active');
+                categoryEndpoints.classList.add('show');
+              }
+            } else {
+              endpoint.style.display = 'none';
+            }
+          });
+
+          document.querySelectorAll('.nav-category').forEach((category) => {
+            const visibleEndpoints = category.querySelectorAll(
+              '.endpoint-item[style="display: flex;"]',
+            );
+            if (visibleEndpoints.length === 0 && searchTerm) {
+              category.style.display = 'none';
+            }
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
