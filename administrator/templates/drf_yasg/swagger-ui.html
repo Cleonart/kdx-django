@@ -39,7 +39,18 @@
       .swagger-ui .topbar,
       .swagger-ui .information-container,
       .swagger-ui .scheme-container {
-        display: none !important;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .swagger-ui .models{
+        display:none;
+      }
+
+      .swagger-ui .info {
+        margin-top: 10px;
+        margin-bottom: 30px;
+        padding: 0px 20px;
       }
 
       .swagger-ui .wrapper {
@@ -482,6 +493,23 @@
       .swagger-ui .parameters-col_description{
         font-size: 14px;
       }
+
+      .authorize-btn {
+        margin:12px 20px;
+        padding:10px 12px;
+        width:calc(100% - 40px);
+        border:none;
+        background:#ff6b35;
+        color:#fff;
+        font-weight:600;
+        border-radius:6px;
+        cursor:pointer
+      }
+
+      .authorize-btn:hover{
+        background:#ff5722
+      }
+
     </style>
   </head>
   <body>
@@ -500,6 +528,8 @@
             placeholder="Search endpoints..."
           />
         </div>
+
+       <button class="authorize-btn" id="custom-authorize-btn" @click="triggerAuthorize()">Authorize</button>
 
         <nav class="sidebar-nav">
           <div
@@ -548,6 +578,7 @@
             <span>{% verbatim %}{{ activeCategory }}{% endverbatim %}</span>
           </div>
           <div id="swagger-ui"></div>
+          <p style="margin-top: 150px;margin-left: 20px;padding-bottom: 20px;">End-of-documentation</p>
         </div>
         </div>
       </main>
@@ -814,6 +845,15 @@
             }, 100);
           };
 
+          const triggerAuthorize = () => {
+            const authBtnLocked = document.querySelector('.btn.authorize.locked');
+            const authBtnUnlocked = document.querySelector('.btn.authorize.unlocked');
+            const authBtn = authBtnLocked || authBtnUnlocked;
+            if (authBtn) {
+              authBtn.click();
+            }
+          };
+
           /**
            * Find operation element in DOM
            */
@@ -1002,6 +1042,7 @@
             
             // Methods
             selectCategory,
+            triggerAuthorize,
             selectEndpoint,
             isActiveEndpoint,
           };
