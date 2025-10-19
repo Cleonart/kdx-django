@@ -8,7 +8,7 @@ class AuthUserCompany(models.Model):
 
     class Meta:
         db_table = 'auth_user_company'
-        unique_together = ('user', 'company_code', 'company')
+        unique_together = ('user', 'company')
 
     user = models.ForeignKey(
         User,
@@ -18,7 +18,6 @@ class AuthUserCompany(models.Model):
         Company,
         on_delete=models.RESTRICT,
         related_name='auth_user_company_ids')
-    company_code = models.CharField(max_length=64)
     is_active = models.BooleanField(default=False)
 
     def __str__(self):

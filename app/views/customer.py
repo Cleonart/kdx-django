@@ -23,7 +23,6 @@ class APICustomer(APIView):
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
-        manual_parameters=[openAPIHeadersCompanyCode()],
         operation_summary='List Customer',
         operation_description='Returns list of customer',
         responses={
@@ -46,7 +45,6 @@ class APICustomer(APIView):
         return Response(ser.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-        manual_parameters=[openAPIHeadersCompanyCode()],
         request_body=CustomerCreateSerializer,
         responses={201: PartnerOutputSerializer},
         operation_summary='Create customer',

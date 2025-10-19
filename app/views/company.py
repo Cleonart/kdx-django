@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
 
 from app.serializer import CompanyListSerializer, PartnerOutputSerializer
 from app.models import Company
@@ -62,7 +61,6 @@ class APICompanies(APIView):
         return Response(ser.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-        # change to your "create" serializer if different
         request_body=CompanyListSerializer,
         responses={201: CompanyListSerializer},
         operation_summary="Create company",
