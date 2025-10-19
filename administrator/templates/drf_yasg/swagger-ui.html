@@ -264,6 +264,12 @@
         color: #666;
       }
 
+      .swagger-ui .opblock .opblock-section-header{
+        box-shadow: none;
+        border-radius: 4px;
+        border: 1px solid rgba(0,0,0,.1);
+      }
+
       /* Category Header */
       .category-header-banner {
         padding: 16px 20px;
@@ -280,6 +286,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        margin-bottom: 20px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       }
 
@@ -309,6 +316,11 @@
       .swagger-ui .opblock[style*='display: block'] {
         display: block !important;
         margin-bottom: 15px;
+        padding: 0px 20px;
+      }
+
+      .swagger-ui .opblock.opblock-post{
+        background-color: transparent;
       }
 
       /* Swagger UI customizations */
@@ -343,6 +355,10 @@
       .swagger-ui .btn.execute:hover {
         background: #ff5722;
         border-color: #ff5722;
+      }
+
+      .swagger-ui textarea{
+        min-height: 100px;
       }
 
       /* Right panel dark theme */
