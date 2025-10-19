@@ -4,6 +4,6 @@ from django.shortcuts import render
 
 def test_template(request):
     return render(request, 'drf_yasg/swagger-ui.html', {
-        'title': 'Test Title',
+        'title': 'L-SALES API Docs',
         'description': 'Test Description',
     })

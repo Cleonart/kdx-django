@@ -24,6 +24,7 @@ class APICompanies(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
+        tags=['Companies'],
         manual_parameters=[
             openAPIParamsInQueryAsStr('code', 'Filter by company code'),
             openAPIParamsInQueryAsStr('name', 'Filter by company name'),
@@ -61,6 +62,7 @@ class APICompanies(APIView):
         return Response(ser.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
+        tags=['Companies'],
         request_body=CompanyListSerializer,
         responses={201: CompanyListSerializer},
         operation_summary="Create company",
