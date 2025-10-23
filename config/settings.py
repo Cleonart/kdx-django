@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     # modules
     'app',
     'authentication',
+    'product',
     'crm',
     'administrator',
 ]

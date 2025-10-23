@@ -25,8 +25,7 @@ class SessionTokenObtainPairView(TokenObtainPairView):
 
         request.session['kdx.company_code'] = request.data.get(
             'company_code', '')
-        print('test', request.session['kdx.company_code'])
-        print('session:', request.session.items())
+
         request.session.set_expiry(60 * 60 * 8)  # 8 hours (adjust as needed)
         request.session.cycle_key()              # rotate for security
 

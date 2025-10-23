@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from app.context import get_current_company
-
+from app.models.company import Company
 
 class CompanyQuerySet(models.QuerySet):
 
@@ -84,7 +84,7 @@ class BaseModel(models.Model):
     """Base model with company filtering and soft delete"""
 
     company = models.ForeignKey(
-        'Company',
+        Company,
         on_delete=models.RESTRICT,
         related_name='%(class)s_set')
     created_at = models.DateTimeField(auto_now_add=True)

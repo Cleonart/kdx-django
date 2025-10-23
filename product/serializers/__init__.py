@@ -1,0 +1,1 @@
+from .product_attr_color_serializer import ProductAttrColorCreateSerializer

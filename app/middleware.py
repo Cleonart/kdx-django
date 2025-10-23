@@ -12,7 +12,6 @@ class CompanyMiddleware:
         session = request.session
         session_company_code: str = session.get('kdx.company_code')
         company: Company = None
-        print(session_company_code)
 
         if session_company_code:
             cache_key: str = f'company_code_{session_company_code}'
